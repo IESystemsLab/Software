@@ -32,11 +32,11 @@
 % preemptive failures, and batching.
 %
 % Most importantly, a collection of DEMO scripts is included showing how to use the analytical
-% formulas, the simulation models, and both to compare their results.  Note that the DEMO scripts
-% are only usage examples, the collection is certainly not exhaustive, and they are included to 
-% illustrate how the underlying analytical formulas and simulation models might be used.  It is
-% hoped that these limited examples will inspire users to create and share additional models and
-% examples.  The remainder of this overview summarizes what the included DEMO scripts do.
+% formulas, the simulation models, and both to compare their results.  Each DEMO script is a usage 
+% example, an illustration of what is possible, an idea for a lab experiment.  The collection is
+% certainly not exhaustive, and it is hoped that they will inspire users to create more, plus 
+% transcribe the good ones into carefully-defined lab experiments for education.  The remainder of 
+% this overview summarizes what the included DEMO scripts do.
 
 
 
