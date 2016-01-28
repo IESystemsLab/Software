@@ -1,0 +1,340 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DEMO_PennyFab_ProductionLine</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-23"><meta name="DC.source" content="DEMO_PennyFab_ProductionLine.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Penny Fab and Basic Factory Dynamics</a></li><li><a href="#4">Balanced Production Line</a></li><li><a href="#12">Unbalanced Line</a></li><li><a href="#15">Worst Case Performance</a></li><li><a href="#17">Practical Worst Case Performance</a></li><li><a href="#20">Basic Factory Dynamics</a></li><li><a href="#22">Arrival Process</a></li><li><a href="#23">Encapsulated Workstation Blocks</a></li><li><a href="#24">Exercises from the Book</a></li></ul></div><h2>Penny Fab and Basic Factory Dynamics<a name="1"></a></h2><p>This lecture is intended to introduce the concepts related to Little's law, starting first with a balanced line and validating the relationship, then moving to an unbalanced line, then adding uncertainty. Penny Fab One consists of a simple production line that makes giant one-cent pieces used exclusively in Fourth of July parades. The Penny Fab is a tandem production line, one where the four processing steps are organized serially.</p><pre class="codeinput">open(<span class="string">'PennyFab_Deterministic'</span>)
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_01.png" alt=""> <p>We're interested in examing the relationship between:</p><div><ul><li>The bottleneck rate (<img src="DEMO_PennyFab_ProductionLine_eq08412092232952756056.png" alt="$r_b$">): the production rate of the workstation having the highest long-term utilization</li><li>The raw process time (<img src="DEMO_PennyFab_ProductionLine_eq09699377331652163485.png" alt="$T_0$">): the sum of the long-term average process times of each workstation in the line, or the amount of time it would take one job to traverse an empty line</li><li>The critical WIP (<img src="DEMO_PennyFab_ProductionLine_eq08439316466069777376.png" alt="$W_0$">): the WIP level for which the line achieves its maximum throughput (<img src="DEMO_PennyFab_ProductionLine_eq08412092232952756056.png" alt="$r_b$">) with minimum cycle time (<img src="DEMO_PennyFab_ProductionLine_eq09699377331652163485.png" alt="$T_0$">).</li></ul></div><p>We seek to show: <img src="DEMO_PennyFab_ProductionLine_eq10167376366585560328.png" alt="$W_0=r_b T_0$"></p><h2>Balanced Production Line<a name="4"></a></h2><p>In this example, each machine takes exactly 2 hours to perform its operation. Since the capacity of each machine is the same and equals one penny every 2 hours, any of the four machines is the bottleneck. Therefore, <img src="DEMO_PennyFab_ProductionLine_eq14369403533163288264.png" alt="$r_b=0.5$"> penny per hour This production line is balanced since all stations have equal capacity. The raw processing time is simply the sum of the processing times at the four stations: <img src="DEMO_PennyFab_ProductionLine_eq12772332187548138048.png" alt="$T_0=8$"> hours and <img src="DEMO_PennyFab_ProductionLine_eq15575965825500848640.png" alt="$W_0=r_b T_0=0.5\times8=4$"> pennies</p><p>These results can be validated using the Simulation:</p><pre class="codeinput">setProcessNodeParameters(<span class="string">'PennyFab_Deterministic'</span>, [1 1 1 1], [2 2 2 2]);
+<span class="comment">% Double Click on 'WIP_Queue' and $W_0$ should be set to 1;</span>
+set_param(<span class="string">'PennyFab_Deterministic/WIP_Queue'</span>, <span class="string">'NumberOfEventsPerPeriod'</span>, <span class="string">'1'</span>);
+<span class="comment">% Run the simulation.</span>
+simOut = sim(<span class="string">'PennyFab_Deterministic'</span>, <span class="string">'StopTime'</span>, <span class="string">'40'</span>);
+<span class="comment">% Examine each pop-up window.</span>
+Simulink.sdi.view
+</pre><p>OUTPUT Analysis:</p><div><ul><li>The throughput for each workstation, Figure 1, shows that one job comes through the workstation every 8 hours.</li><li>The throughput for the whole system, Figure 2, shows that one job comes through the system every 8 hours.</li><li>The cycle time for the whole system, Figure 3 show that the cycle time for each job that comes through the system is 8 hours.</li><li>Finally, the WIP for the whole system, Figure 4, shows that there are typically 0 jobs waiting in the queue. The jumps to 1 account for the job passing through the queue instantly before entering the system.</li></ul></div><p><b>Exercise</b>: Increment <img src="DEMO_PennyFab_ProductionLine_eq08439316466069777376.png" alt="$W_0$"> from 1:10. Run the system and describe the changes to the system. Discuss warm-up period.</p><p>Suppose now we want to be able to do analysis on the data rather than just looking at graphs:</p><pre class="codeinput"> set_param(<span class="string">'PennyFab_Deterministic/WIP_Queue'</span>, <span class="string">'NumberOfEventsPerPeriod'</span>, num2str(4));
+ simOut = sim(<span class="string">'PennyFab_Deterministic'</span>, <span class="string">'StopTime'</span>, <span class="string">'1000'</span>);
+ getCycleTime(simOut)
+ getThroughput(simOut)
+</pre><pre class="codeoutput">
+ans =
+
+     8
+
+
+ans =
+
+    0.5000
+
+</pre><p>The function <i>PennyFabScript_BestCasePerformance(ParallelMachineCount, ProcessingTime, varargin)</i> simulates the Best Case Performance of a Tandem Production Line and sweeps over WIP levels from 1 to 25</p><pre class="codeinput">PennyFabScript_BestCasePerformance([1 1 1 1], [2 2 2 2], {<span class="string">'PlotsOn'</span>});
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_02.png" alt=""> <p>From a performance standpoint, it is clear that Penny Fab One runs best when there are four pennies in WIP. Only this WIP level results in minimum cycle time <img src="DEMO_PennyFab_ProductionLine_eq09699377331652163485.png" alt="$T_0$"> and maximum throughput <img src="DEMO_PennyFab_ProductionLine_eq08412092232952756056.png" alt="$r_b$"> &#8211; any less and we lose throughput with no decrease in cycle time; any more and we increase cycle time with no increase in throughput. This special WIP level is the critical WIP (W0) <img src="DEMO_PennyFab_ProductionLine_eq10167376366585560328.png" alt="$W_0=r_b T_0$"></p><p>These graphs and this formula reveal an interesting and fundamental retlationship between WIP, cycle time, and throughput; it is known as Little's Law. WIP = TH x CT Little's law holds for all production lines, not just those with zero variability (an exercise for later). However, it does not hold precisely for less-than-infinite times except under very special circumstances. Nonetheless, we will use it as a cnojecture about the nature of manufacutring systems and use it as an an approximation when it is not exact.</p><h2>Unbalanced Line<a name="12"></a></h2><p>Next we'll look at an unbalanced line.</p><p>The system paratmeters are set as follows (Table 7.1)</p><div><ul><li>Station Number = [1 2 3 4]</li><li>Number of Machines = [1 2 6 2]</li><li>Process Time (hours) = [2 5 10 3]</li><li>Calculated Station Capacity = [0.5 0.4 0.6 0.67]</li></ul></div><pre class="codeinput">PennyFabScript_BestCasePerformance([1 2 6 2], [2 5 10 3], {<span class="string">'PlotsOn'</span>});
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_03.png" alt=""> <p>Does this agree with the relationship discussed above? Since the bottleneck station is station 2, <img src="DEMO_PennyFab_ProductionLine_eq05764377561065795883.png" alt="$r_b=0.4$"> penny per hour, and <img src="DEMO_PennyFab_ProductionLine_eq01699156198991094040.png" alt="$T_0=2+5+10+3=20$"> hours. <img src="DEMO_PennyFab_ProductionLine_eq13884463688726616273.png" alt="$W_0= T_0 r_b=0.4x20=8$"> pennies. This agrees with the graphs in the above figure.</p><h2>Worst Case Performance<a name="15"></a></h2><p>The system performance that has been explored so far is known as Best Case Performance which denotes the maximum throughput and minimum cycle time achievable for a given WIP level. However next we'll characterize, the worst case and practical worst case performance.</p><pre class="codeinput">PennyFabScript_WorstCasePerformance([1 1 1 1], [2 2 2 2], {<span class="string">'PlotsOn'</span>});
+PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {<span class="string">'PlotsOn'</span>});
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_04.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_05.png" alt=""> <p>The worst case performance can result from batch moves.</p><h2>Practical Worst Case Performance<a name="17"></a></h2><p>Both the best-case and worst-case performances occur in systems with no randomness. There is variability in the worst-case system, since jobs hav eidfferent process times; but there is no randomness, sincall prcoess times are completely predictable.</p><p>The practical worse case requires maximum randomness scenario:</p><div><ul><li>The line must be balanced</li><li>All stations must consist of single machines</li><li>Proces times bust be random and occur accodring to the exponential distribution</li></ul></div><p>In the simulation, queues have been added between each of the servers to buffer this randomness and prevent unnecessary blockage and starvation of the workstations.</p><pre class="codeinput">open(<span class="string">'PennyFab_Stochastic'</span>)
+PennyFabScript_PracticalWorstCasePerformance([1 1 1 1], [2 2 2 2], {<span class="string">'PlotsOn'</span>});
+PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {<span class="string">'PlotsOn'</span>});
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_06.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_07.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_08.png" alt=""> <h2>Basic Factory Dynamics<a name="20"></a></h2><p>With the formulas validated we can put them together:</p><pre class="codeinput">BasicFactoryDynamics([1 1 1 1], [2 2 2 2]);
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_09.png" alt=""> <p>Where does the unbalanced stochastic system performance fit into the basic factory dynamics?</p><pre class="codeinput">FactoryDynamicsSol = BasicFactoryDynamics([1 2 6 2], [2 5 10 3], {<span class="string">'PlotsOff'</span>});
+PennyFabTwoSol = PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {<span class="string">'PlotsOff'</span>});
+    figure(<span class="string">'Name'</span>,<span class="string">'Basic Factory Dynamics'</span>)
+    subplot(1,2,1)
+    hold <span class="string">all</span>
+    plot(1:25, FactoryDynamicsSol (1:25,1,1), <span class="string">'k*:'</span>)
+    plot(1:25, FactoryDynamicsSol (1:25,1,2), <span class="string">'k*:'</span>)
+    plot(1:25, FactoryDynamicsSol (1:25,1,3), <span class="string">'k*:'</span>)
+	 plot(1:25, PennyFabTwoSol (1:25,2), <span class="string">'r*:'</span>)
+    axis([0 25 0 80])
+    xlabel(<span class="string">'WIP'</span>)
+    ylabel(<span class="string">'Cycle Time'</span>)
+    hold <span class="string">off</span>
+    subplot(1,2,2)
+    hold <span class="string">all</span>
+    plot(1:25, FactoryDynamicsSol (:,2,1), <span class="string">'k*:'</span>)
+    plot(1:25, FactoryDynamicsSol (:,2,2), <span class="string">'k*:'</span>)
+    plot(1:25, FactoryDynamicsSol (:,2,3), <span class="string">'k*:'</span>)
+plot(1:25, PennyFabTwoSol (1:25,3), <span class="string">'r*:'</span>)
+    axis([0 25 0 0.5])
+    xlabel(<span class="string">'WIP'</span>)
+    ylabel(<span class="string">'Throughput'</span>)
+    hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_10.png" alt=""> <h2>Arrival Process<a name="22"></a></h2><p>Up until this point, we have only considered closed systems with a constant WIP (CONWIP) level. But in practice, flow lines are subject to an arrival process. In this model, the production line is an open system subject to an external arrival process, the "Arrival Generator" block.</p><pre class="codeinput"> open(<span class="string">'PennyFab_ArrivalProcess'</span>)
+
+setProcessNodeParameters(<span class="string">'PennyFab_ArrivalProcess'</span>, [1 1 1 1], [2 2 2 2]);
+<span class="comment">% Set 'Arrival Generator' to an Exponential Distribution with mean 2</span>
+set_param(<span class="string">'PennyFab_ArrivalProcess/Arrival Generator'</span>, <span class="string">'Mean'</span>,<span class="string">'2'</span>, <span class="string">'Distribution'</span>, <span class="string">'Exponential'</span>);
+simOut = sim(<span class="string">'PennyFab_ArrivalProcess'</span>, <span class="string">'StopTime'</span>, <span class="string">'1000'</span>, <span class="string">'SaveOutput'</span>, <span class="string">'on'</span>);
+WIP = simOut.get(<span class="string">'WIP'</span>).signals.values;
+figure
+scatter(1:length(WIP), WIP, <span class="string">'k.'</span>)
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_11.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_12.png" alt=""> <h2>Encapsulated Workstation Blocks<a name="23"></a></h2><p>One goal of this introductory section is to build up a production line model. In the balanced deterministic production line, the buffers (or queues) in between each stage are unnecessary and their capacity could be set to 0. However in the unbalanced production line, these queues are required to buffer out uneven production rates. Then in the stochastic production lines, the ProcessTime blocks are added to provide flexibility to set processing time distributions. Also, the queues are necessary to buffer out uncertainty in arrival and processing times. The last step of introducing the production line models is to encapsulate the ProcessTime, Queue, and Server into a single Workstation block. This encapsulation process makes it easy to manipulate the workstation as one object, and replace the workstation block with one that exhibits a different behavior, e.g. a workstation with failures, which will be an important feature for the next section.</p><pre class="codeinput">open(<span class="string">'PennyFab'</span>)
+setProcessNodeParameters(<span class="string">'PennyFab'</span>, [1 1 1 1], [2 2 2 2]);
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_13.png" alt=""> <h2>Exercises from the Book<a name="24"></a></h2><p>Rather than do the exercises with paper and pencil, here are two examples of using the tools constructed for this section to do the examples and exercises in the book.</p><p>7.3.4 Bottleneck Rates and Cycle Time</p><pre class="codeinput">BasicFactoryDynamics([1 1 1 1], [10 10 10 15]);
+BasicFactoryDynamics([1 1 1 1], [10 10 10 10]);
+BasicFactoryDynamics([1 1 1 1], [5 5 5 15]);
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_14.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_15.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_16.png" alt=""> <p>Problem #9:</p><pre class="codeinput">BasicFactoryDynamics([4 4 2 1], [4 5 2 1]);
+BasicFactoryDynamics([1 1 1 1], [0.5 0.5 0.48 0.48]);
+</pre><img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_17.png" alt=""> <img vspace="5" hspace="5" src="DEMO_PennyFab_ProductionLine_18.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Penny Fab and Basic Factory Dynamics
+% This lecture is intended to introduce the concepts related to Little's law, starting first with a balanced line and validating the relationship, then moving to an unbalanced line, then adding uncertainty. Penny Fab One consists of a simple production line that makes giant one-cent pieces used exclusively in Fourth of July parades. The Penny Fab is a tandem production line, one where the four processing steps are organized serially. 
+
+open('PennyFab_Deterministic')
+
+%%
+% We're interested in examing the relationship between:
+%
+% * The bottleneck rate ($r_b$): the production rate of the workstation having the highest long-term utilization
+% * The raw process time ($T_0$): the sum of the long-term average process times of each workstation in the line, or the amount of time it would take one job to traverse an empty line
+% * The critical WIP ($W_0$): the WIP level for which the line achieves its maximum throughput ($r_b$) with minimum cycle time ($T_0$).
+%%
+% We seek to show: $W_0=r_b T_0$
+
+%% Balanced Production Line
+% In this example, each machine takes exactly 2 hours to perform its operation. Since the capacity of each machine is the same and equals one penny every 2 hours, any of the four machines is the bottleneck. Therefore, $r_b=0.5$ penny per hour
+% This production line is balanced since all stations have equal capacity.
+% The raw processing time is simply the sum of the processing times at the four stations: $T_0=8$ hours and $W_0=r_b T_0=0.5\times8=4$ pennies
+
+%%
+% These results can be validated using the Simulation:
+
+setProcessNodeParameters('PennyFab_Deterministic', [1 1 1 1], [2 2 2 2]);
+% Double Click on 'WIP_Queue' and $W_0$ should be set to 1; 
+set_param('PennyFab_Deterministic/WIP_Queue', 'NumberOfEventsPerPeriod', '1');
+% Run the simulation.
+simOut = sim('PennyFab_Deterministic', 'StopTime', '40');
+% Examine each pop-up window.
+Simulink.sdi.view
+
+%% 
+% OUTPUT Analysis: 
+%
+% * The throughput for each workstation, Figure 1, shows that one job comes through the workstation every 8 hours. 
+% * The throughput for the whole system, Figure 2, shows that one job comes through the system every 8 hours. 
+% * The cycle time for the whole system, Figure 3 show that the cycle time for each job that comes through the system is 8 hours.
+% * Finally, the WIP for the whole system, Figure 4, shows that there are typically 0 jobs waiting in the queue. The jumps to 1 account for the job passing through the queue instantly before entering the system.
+
+
+%%
+% *Exercise*:
+% Increment $W_0$ from 1:10. Run the system and describe the changes to the system. Discuss warm-up period.
+
+%%
+% Suppose now we want to be able to do analysis on the data rather than just looking at graphs:
+ set_param('PennyFab_Deterministic/WIP_Queue', 'NumberOfEventsPerPeriod', num2str(4));  
+ simOut = sim('PennyFab_Deterministic', 'StopTime', '1000');
+ getCycleTime(simOut)  
+ getThroughput(simOut)
+ 
+%% 
+% The function _PennyFabScript_BestCasePerformance(ParallelMachineCount, ProcessingTime, varargin)_
+% simulates the Best Case Performance of a Tandem Production Line and sweeps over WIP levels from 1 to 25
+
+PennyFabScript_BestCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+
+    
+%% 
+% From a performance standpoint, it is clear that Penny Fab One runs best when there are four pennies in WIP. Only this WIP level results in minimum cycle time $T_0$ and maximum throughput $r_b$ – any less and we lose throughput with no decrease in cycle time; any more and we increase cycle time with no increase in throughput. This special WIP level is the critical WIP (W0)
+% $W_0=r_b T_0$
+%%
+% These graphs and this formula reveal an interesting and fundamental retlationship between WIP, cycle time, and throughput; it is known as Little's Law.
+% WIP = TH x CT
+% Little's law holds for all production lines, not just those with zero variability (an exercise for later). However, it does not hold precisely for less-than-infinite times except under very special circumstances. Nonetheless, we will use it as a cnojecture about the nature of manufacutring systems and use it as an an approximation when it is not exact.
+
+%% Unbalanced Line
+% Next we'll look at an unbalanced line.
+
+%%
+% The system paratmeters are set as follows (Table 7.1)
+%
+% * Station Number = [1 2 3 4]
+% * Number of Machines = [1 2 6 2]
+% * Process Time (hours) = [2 5 10 3]
+% * Calculated Station Capacity = [0.5 0.4 0.6 0.67]
+
+ 
+PennyFabScript_BestCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+    
+%%
+% Does this agree with the relationship discussed above? Since the bottleneck station is station 2, $r_b=0.4$ penny per hour, and $T_0=2+5+10+3=20$ hours.
+% $W_0= T_0 r_b=0.4x20=8$ pennies. This agrees with the graphs in the above figure.
+ 
+%% Worst Case Performance
+% The system performance that has been explored so far is known as Best Case Performance which denotes the maximum throughput and minimum cycle time achievable for a given WIP level. However next we'll characterize, the worst case and practical worst case performance.
+ 
+PennyFabScript_WorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+ 
+%% 
+% The worst case performance can result from batch moves. 
+ 
+
+%% Practical Worst Case Performance
+% Both the best-case and worst-case performances occur in systems with no randomness. There is variability in the worst-case system, since jobs hav eidfferent process times; but there is no randomness, sincall prcoess times are completely predictable.
+
+%%
+% The practical worse case requires maximum randomness scenario:
+%
+% * The line must be balanced
+% * All stations must consist of single machines
+% * Proces times bust be random and occur accodring to the exponential distribution
+%% 
+% In the simulation, queues have been added between each of the servers to buffer this randomness and prevent unnecessary blockage and starvation of the workstations.
+ 
+open('PennyFab_Stochastic')
+PennyFabScript_PracticalWorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+   
+ 
+%% Basic Factory Dynamics 
+% With the formulas validated we can put them together:
+ 
+BasicFactoryDynamics([1 1 1 1], [2 2 2 2]);
+ 
+   
+%% 
+% Where does the unbalanced stochastic system performance fit into the basic factory dynamics?
+FactoryDynamicsSol = BasicFactoryDynamics([1 2 6 2], [2 5 10 3], {'PlotsOff'});
+PennyFabTwoSol = PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOff'});
+    figure('Name','Basic Factory Dynamics')
+    subplot(1,2,1)
+    hold all
+    plot(1:25, FactoryDynamicsSol (1:25,1,1), 'k*:')
+    plot(1:25, FactoryDynamicsSol (1:25,1,2), 'k*:')
+    plot(1:25, FactoryDynamicsSol (1:25,1,3), 'k*:')
+	 plot(1:25, PennyFabTwoSol (1:25,2), 'r*:')
+    axis([0 25 0 80])
+    xlabel('WIP')
+    ylabel('Cycle Time')
+    hold off
+    subplot(1,2,2)
+    hold all
+    plot(1:25, FactoryDynamicsSol (:,2,1), 'k*:')
+    plot(1:25, FactoryDynamicsSol (:,2,2), 'k*:')
+    plot(1:25, FactoryDynamicsSol (:,2,3), 'k*:')
+plot(1:25, PennyFabTwoSol (1:25,3), 'r*:')
+    axis([0 25 0 0.5])
+    xlabel('WIP')
+    ylabel('Throughput')
+    hold off  
+ 
+
+%% Arrival Process
+% Up until this point, we have only considered closed systems with a constant WIP (CONWIP) level.
+% But in practice, flow lines are subject to an arrival process. In this
+% model, the production line is an open system subject to an external
+% arrival process, the "Arrival Generator" block.
+ open('PennyFab_ArrivalProcess') 
+
+setProcessNodeParameters('PennyFab_ArrivalProcess', [1 1 1 1], [2 2 2 2]);
+% Set 'Arrival Generator' to an Exponential Distribution with mean 2
+set_param('PennyFab_ArrivalProcess/Arrival Generator', 'Mean','2', 'Distribution', 'Exponential');
+simOut = sim('PennyFab_ArrivalProcess', 'StopTime', '1000', 'SaveOutput', 'on');  
+WIP = simOut.get('WIP').signals.values;
+figure
+scatter(1:length(WIP), WIP, 'k.')
+
+
+%% Encapsulated Workstation Blocks
+% One goal of this introductory section is to build up a production line
+% model.
+% In the balanced deterministic production line, the buffers (or queues) in between
+% each stage are unnecessary and their capacity could be set to 0. However in the unbalanced
+% production line, these queues are required to buffer out uneven
+% production rates. Then in the stochastic production
+% lines, the ProcessTime blocks are added to provide flexibility to set processing time distributions.
+% Also, the queues are necessary to buffer out uncertainty in arrival and processing
+% times.  
+% The last step of introducing the production line models is to encapsulate
+% the ProcessTime, Queue, and Server into a single Workstation block. This
+% encapsulation process makes it easy to manipulate the workstation as one
+% object, and replace the workstation block with one that exhibits a
+% different behavior, e.g. a workstation with failures, which will be an
+% important feature for the next section.
+
+open('PennyFab')
+setProcessNodeParameters('PennyFab', [1 1 1 1], [2 2 2 2]);
+
+   
+ 
+%% Exercises from the Book 
+% Rather than do the exercises with paper and pencil, here are two examples
+% of using the tools constructed for this section to do the examples and
+% exercises in the book.
+%%
+% 7.3.4 Bottleneck Rates and Cycle Time
+BasicFactoryDynamics([1 1 1 1], [10 10 10 15]);
+BasicFactoryDynamics([1 1 1 1], [10 10 10 10]);  
+BasicFactoryDynamics([1 1 1 1], [5 5 5 15]);  
+ 
+   
+ 
+%% 
+% Problem #9:
+BasicFactoryDynamics([4 4 2 1], [4 5 2 1]);
+BasicFactoryDynamics([1 1 1 1], [0.5 0.5 0.48 0.48]);
+ 
+
+##### SOURCE END #####
+--></body></html>
