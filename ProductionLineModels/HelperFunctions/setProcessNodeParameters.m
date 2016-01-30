@@ -53,12 +53,16 @@ elseif strcmp(Model, 'PennyFab_ArrivalProcess') == 1
     set_param(strcat(Model, '/ProcessTime_Deburring'), 'meanExp', num2str(ProcessingTime(4)));
     
     exitFlag = 1;
-elseif strcmp(Model, 'PennyFab') ==1
+elseif strcmp(Model, 'ProdSystem_PennyFab') ==1
     try
-        set_param(strcat(Model, '/Head_Stamping'), 'NumberOfServers', num2str(ParallelMachineCount(1)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(1)));
-        set_param(strcat(Model, '/Tail_Stamping'), 'NumberOfServers', num2str(ParallelMachineCount(2)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(2)));
-        set_param(strcat(Model, '/Rimming'), 'NumberOfServers', num2str(ParallelMachineCount(3)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(3)));
-        set_param(strcat(Model, '/Deburring'), 'NumberOfServers', num2str(ParallelMachineCount(4)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(4)));
+        set_param(strcat(Model, '/Head_Stamping/GGkWorkstation'), 'NumberOfServers', num2str(ParallelMachineCount(1)));
+        set_param(strcat(Model, '/Head_Stamping/RandomNumbers_ProcessingTimes'), 'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(1)));
+        set_param(strcat(Model, '/Tail_Stamping/GGkWorkstation'), 'NumberOfServers', num2str(ParallelMachineCount(2)));
+        set_param(strcat(Model, '/Tail_Stamping/RandomNumbers_ProcessingTimes'), 'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(2)));
+        set_param(strcat(Model, '/Rimming/GGkWorkstation'), 'NumberOfServers', num2str(ParallelMachineCount(3)));
+        set_param(strcat(Model, '/Rimming/RandomNumbers_ProcessingTimes'), 'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(3)));
+        set_param(strcat(Model, '/Deburring/GGkWorkstation'), 'NumberOfServers', num2str(ParallelMachineCount(4)));
+        set_param(strcat(Model, '/Deburring/RandomNumbers_ProcessingTimes'), 'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(4)));
         exitFlag = 1;
     catch
         exitFlag = 0;

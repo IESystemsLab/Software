@@ -174,8 +174,8 @@ scatter(1:length(WIP), WIP, 'k.')
 % different behavior, e.g. a workstation with failures, which will be an
 % important feature for the next section.
 
-open('PennyFab')
-setProcessNodeParameters('PennyFab', [1 1 1 1], [2 2 2 2]);
+open('ProdSystem_PennyFab')
+setProcessNodeParameters('ProdSystem_PennyFab', [1 1 1 1], [2 2 2 2]);
 
    
  
