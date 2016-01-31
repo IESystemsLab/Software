@@ -1,4 +1,4 @@
-function Solution = PennyFabScript_WorstCasePerformance(ParallelMachineCount, ProcessingTime, varargin)
+function Solution = SimWrapper_PennyFab_WorstCasePerformance(ParallelMachineCount, ProcessingTime, varargin)
 %Simulates the Worst Case Performance of a Tandem Production Line 
 
 %Solution = PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'})

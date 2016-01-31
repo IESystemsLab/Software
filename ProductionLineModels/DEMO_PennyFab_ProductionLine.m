@@ -1,24 +1,41 @@
+%% Modeling Production Lines and Basic Factory Dynamics
+% This demonstration is intended to introduce the concepts related to Little's law, starting first with a balanced line and validating the relationship, then moving to an unbalanced line, then adding uncertainty.
+% The Penny Fab is a tandem production line, one where the four processing steps are organized serially. 
+%
+% Additionally, this demonstration will construct the production line
+% simulation models in a couple of steps:
+% 
+% * Baseline Balanced Deterministic Model: serial set of servers
+% * Unbalanced Deterministic Model: requires the addition of queues in
+% between the servers to buffer out uneven processing rates.
+% * Stochastic Processing Times: requires the addition of random number generators
+% for generating processing times from a distribution
+% * An Arrival Process: rather than recirculating the entities in the system,
+% an open system requires an arrival generator
+% * Encapsulate Workstations: Encapsulate
+% the ProcessTime, Queue, and Server into a single Workstation block. This
+% encapsulation process makes it easy to manipulate the workstation as one
+% object, and replace the workstation block with one that exhibits a
+% different behavior,
+
+
 %% Penny Fab and Basic Factory Dynamics
-% This lecture is intended to introduce the concepts related to Little's law, starting first with a balanced line and validating the relationship, then moving to an unbalanced line, then adding uncertainty. Penny Fab One consists of a simple production line that makes giant one-cent pieces used exclusively in Fourth of July parades. The Penny Fab is a tandem production line, one where the four processing steps are organized serially. 
-
-open('PennyFab_Deterministic')
-
-%%
 % We're interested in examing the relationship between:
 %
 % * The bottleneck rate ($r_b$): the production rate of the workstation having the highest long-term utilization
 % * The raw process time ($T_0$): the sum of the long-term average process times of each workstation in the line, or the amount of time it would take one job to traverse an empty line
 % * The critical WIP ($W_0$): the WIP level for which the line achieves its maximum throughput ($r_b$) with minimum cycle time ($T_0$).
-%%
+%
 % We seek to show: $W_0=r_b T_0$
 
 %% Balanced Production Line
 % In this example, each machine takes exactly 2 hours to perform its operation. Since the capacity of each machine is the same and equals one penny every 2 hours, any of the four machines is the bottleneck. Therefore, $r_b=0.5$ penny per hour
 % This production line is balanced since all stations have equal capacity.
 % The raw processing time is simply the sum of the processing times at the four stations: $T_0=8$ hours and $W_0=r_b T_0=0.5\times8=4$ pennies
-
-%%
+%
 % These results can be validated using the Simulation:
+
+open('PennyFab_Deterministic')
 
 setProcessNodeParameters('PennyFab_Deterministic', [1 1 1 1], [2 2 2 2]);
 % Double Click on 'WIP_Queue' and $W_0$ should be set to 1; 
@@ -52,7 +69,7 @@ Simulink.sdi.view
 % The function _PennyFabScript_BestCasePerformance(ParallelMachineCount, ProcessingTime, varargin)_
 % simulates the Best Case Performance of a Tandem Production Line and sweeps over WIP levels from 1 to 25
 
-PennyFabScript_BestCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+SimWrapper_PennyFab_BestCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
 
     
 %% 
@@ -75,7 +92,7 @@ PennyFabScript_BestCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
 % * Calculated Station Capacity = [0.5 0.4 0.6 0.67]
 
  
-PennyFabScript_BestCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+SimWrapper_PennyFab_BestCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
     
 %%
 % Does this agree with the relationship discussed above? Since the bottleneck station is station 2, $r_b=0.4$ penny per hour, and $T_0=2+5+10+3=20$ hours.
@@ -83,9 +100,9 @@ PennyFabScript_BestCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
  
 %% Worst Case Performance
 % The system performance that has been explored so far is known as Best Case Performance which denotes the maximum throughput and minimum cycle time achievable for a given WIP level. However next we'll characterize, the worst case and practical worst case performance.
- 
-PennyFabScript_WorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
-PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+
+SimWrapper_PennyFab_WorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+SimWrapper_PennyFab_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
  
 %% 
 % The worst case performance can result from batch moves. 
@@ -104,8 +121,8 @@ PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
 % In the simulation, queues have been added between each of the servers to buffer this randomness and prevent unnecessary blockage and starvation of the workstations.
  
 open('PennyFab_Stochastic')
-PennyFabScript_PracticalWorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
-PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
+SimWrapper_PennyFab_PracticalWorstCasePerformance([1 1 1 1], [2 2 2 2], {'PlotsOn'});
+SimWrapper_PennyFab_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'});
    
  
 %% Basic Factory Dynamics 
@@ -117,7 +134,7 @@ BasicFactoryDynamics([1 1 1 1], [2 2 2 2]);
 %% 
 % Where does the unbalanced stochastic system performance fit into the basic factory dynamics?
 FactoryDynamicsSol = BasicFactoryDynamics([1 2 6 2], [2 5 10 3], {'PlotsOff'});
-PennyFabTwoSol = PennyFabScript_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOff'});
+PennyFabTwoSol = SimWrapper_PennyFab_PracticalWorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOff'});
     figure('Name','Basic Factory Dynamics')
     subplot(1,2,1)
     hold all
@@ -174,25 +191,7 @@ scatter(1:length(WIP), WIP, 'k.')
 % different behavior, e.g. a workstation with failures, which will be an
 % important feature for the next section.
 
-open('ProdSystem_PennyFab')
-setProcessNodeParameters('ProdSystem_PennyFab', [1 1 1 1], [2 2 2 2]);
+open('ProdSys_PennyFab')
+setProcessNodeParameters('ProdSys_PennyFab', [1 1 1 1], [2 2 2 2]);
 
-   
- 
-%% Exercises from the Book 
-% Rather than do the exercises with paper and pencil, here are two examples
-% of using the tools constructed for this section to do the examples and
-% exercises in the book.
-%%
-% 7.3.4 Bottleneck Rates and Cycle Time
-BasicFactoryDynamics([1 1 1 1], [10 10 10 15]);
-BasicFactoryDynamics([1 1 1 1], [10 10 10 10]);  
-BasicFactoryDynamics([1 1 1 1], [5 5 5 15]);  
- 
-   
- 
-%% 
-% Problem #9:
-BasicFactoryDynamics([4 4 2 1], [4 5 2 1]);
-BasicFactoryDynamics([1 1 1 1], [0.5 0.5 0.48 0.48]);
  
