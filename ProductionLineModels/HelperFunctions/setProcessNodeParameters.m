@@ -53,12 +53,19 @@ elseif strcmp(Model, 'PennyFab_ArrivalProcess') == 1
     set_param(strcat(Model, '/ProcessTime_Deburring'), 'meanExp', num2str(ProcessingTime(4)));
     
     exitFlag = 1;
-elseif strcmp(Model, 'PennyFab') ==1
+elseif strcmp(Model, 'ProdSys_PennyFab') ==1 || strcmp(Model, 'ProdSys_CONWIP') ==1 || strcmp(Model, 'ProdSys_Push') ==1
+    if strcmp(Model, 'ProdSys_PennyFab') ==1
+        WorkstationSet = {'Head_Stamping', 'Tail_Stamping', 'Rimming', 'Deburring'};
+    else 
+        WorkstationSet = {'Workstation1', 'Workstation2', 'Workstation3', 'Workstation4'};
+    end
+    
     try
-        set_param(strcat(Model, '/Head_Stamping'), 'NumberOfServers', num2str(ParallelMachineCount(1)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(1)));
-        set_param(strcat(Model, '/Tail_Stamping'), 'NumberOfServers', num2str(ParallelMachineCount(2)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(2)));
-        set_param(strcat(Model, '/Rimming'), 'NumberOfServers', num2str(ParallelMachineCount(3)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(3)));
-        set_param(strcat(Model, '/Deburring'), 'NumberOfServers', num2str(ParallelMachineCount(4)),'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(4)));
+        for ii = 1:length(WorkstationSet)
+            set_param(strcat(Model, '/', WorkstationSet{ii}), 'NumberOfServers', num2str(ParallelMachineCount(ii)));
+            set_param(strcat(Model, '/', WorkstationSet{ii},'/ProcessingTimes'), 'Distribution', 'Exponential','meanExp', num2str(ProcessingTime(ii)));
+        end
+
         exitFlag = 1;
     catch
         exitFlag = 0;

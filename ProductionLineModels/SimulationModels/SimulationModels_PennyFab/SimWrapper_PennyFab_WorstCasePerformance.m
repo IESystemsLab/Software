@@ -1,7 +1,7 @@
-function Solution = PennyFabScript_BestCasePerformance(ParallelMachineCount, ProcessingTime, varargin)
-%Simulates the Best Case Performance of a Tandem Production Line 
+function Solution = SimWrapper_PennyFab_WorstCasePerformance(ParallelMachineCount, ProcessingTime, varargin)
+%Simulates the Worst Case Performance of a Tandem Production Line 
 
-%Solution = PennyFabScript_BestCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'})
+%Solution = PennyFabScript_WorstCasePerformance([1 2 6 2], [2 5 10 3], {'PlotsOn'})
 
 %INPUTS:
 % - ParallelMachineCount := Number of Machines at Each Workstation
@@ -16,7 +16,7 @@ function Solution = PennyFabScript_BestCasePerformance(ParallelMachineCount, Pro
 % Outputs side-by-side plots of WIP vs CT and WIP vs TH
 
 %ATTRIBUTION:
-% Inspired by Section 7.3.1 of Hopp & Spearman, Factory Physics, 1996 (edition 1).
+% Inspired by Section 7.3.2 of Hopp & Spearman, Factory Physics, 1996 (edition 1).
 
 % LICENSE:  3-clause "Revised" or "New" or "Modified" BSD License.
 % Copyright (c) 2015, Georgia Institute of Technology.
@@ -49,32 +49,36 @@ function Solution = PennyFabScript_BestCasePerformance(ParallelMachineCount, Pro
     Model = 'PennyFab_Deterministic';
     open(Model);
     setProcessNodeParameters(Model, ParallelMachineCount, ProcessingTime);
-
         
+
 %% Execute the Simulation
 %For CONWIP values of 1 to 25, simulate the Penny Fab
     for W = 1:25
-        set_param(strcat(Model, '/WIP_Queue'), 'NumberOfEventsPerPeriod', num2str(W));
+        setProcessNodeParameters(Model, ParallelMachineCount, W*ProcessingTime);
+               
+
         %save_system(Model);
         set_param(strcat(Model, '/EntityCount'), 'const', '500');
         simOut = sim(Model, 'StopTime', '100000');
         Solution(W,2) = getCycleTime(simOut);
         Solution(W,1) = W;
-        Solution(W,3) = getThroughput(simOut);
+        Solution(W,3) = W*getThroughput(simOut);
     end
+    
+    setProcessNodeParameters(Model, ParallelMachineCount, ProcessingTime);
 
 %% Construct Basic Factory Dynamics Plot
 
     if isempty(varargin) == 1 || (strcmp(varargin{1}, 'PlotsOn') == 1)
-        figure('Name','Best Case Performance')
+        figure('Name','Worst Case Performance')
         subplot(1,2,1)
         plot(Solution(:,1), Solution(:,3), 'k*:')
-        axis([0 25 0 1])
+        axis([0 1.1*max(Solution(:,1)) 0 1.1*max(Solution(:,3))])
         xlabel('WIP')
         ylabel('Throughput')
         subplot(1,2,2)
         plot(Solution(:,1), Solution(:,2), 'k*:')
-        axis([0 25 0 50])
+        axis([0 1.1*max(Solution(:,1)) 0 1.1*max(Solution(:,2))])
         xlabel('WIP')
         ylabel('Cycle Time')
     end
