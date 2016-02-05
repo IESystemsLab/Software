@@ -87,7 +87,14 @@ HELPER_BuildMultipleWorkstationsInSeries( ...
 simEndTime = 1e7;  %Hopefully won't run this long because of the departure-count cutoff
 set_param(sysName, 'StartTime', num2str(0), 'StopTime', num2str(simEndTime));
 se_randomizeseeds(sysName, 'Mode', 'All');
+
+w1ID = 'Simulink:blocks:DivideByZero';
+w1 = warning('off', w1ID);
+w2ID = 'Simulink:Engine:OutputNotConnected';
+w2 = warning('off', w2ID);
 simout = sim(sysName, 'SaveOutput', 'on');
+% warning(w1); %Reset state
+% warning(w2); %Reset state
 
 
 %% Results
