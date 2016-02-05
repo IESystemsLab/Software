@@ -1,5 +1,5 @@
-%% Workstation Models
-% The contents of the *WorkstationModels* folder concern certain results from queueing theory
+%% Single Workstation Models
+% The contents of the *SingleWorkstationModels* folder concern certain results from queueing theory
 % applied to the analysis of a production line.  The fundamental unit of analysis is a _single
 % workstation_, which in queueing theory is sometimes called a _single queueing node_.  A single
 % workstation is abstractly defined as a FIFO queue with infinite capacity, followed by _k_ parallel 
@@ -20,16 +20,18 @@
 % One set of contributions in this section concerns analytical formulas:
 %
 % * Implementations of analytical approximations for M/M/1, M/M/k, G/G/1, and G/G/k workstations.
-% * Implementation of a "linking equation" to characterize the departure process of one workstation,
-% which may be the arrival process to the next.  This is then used in a separate function to compute 
-% performance measures for multiple G/G/k workstations in series.
 % * Implementations of analytical approximations for a G/G/1 workstation which adjust for non-
 % preemptive setups, preemptive failures, or both.
+% * Implementation of a "linking equation" to characterize the departure process of one workstation,
+% which may be the arrival process to the next.  (UPDATE: Since the linking equation is primarily used
+% to compute analytical results for multiple workstations in series, this content has been moved to the 
+% ProductionLineModels section.)
 %
 % A different set of contributions concerns simulation:
 %
 % * Simulation library blocks for a G/G/k workstation, which may feature non-preemptive setups, 
-% preemptive failures, and batching.
+% preemptive failures, and batching.  Each allows choosing from a variety of probability distributions
+% for the arrival and service processes.
 %
 % Most importantly, a collection of DEMO scripts is included showing how to use the analytical
 % formulas, the simulation models, and both to compare their results.  Each DEMO script is a usage 
@@ -68,23 +70,6 @@ DEMO_QTheory_SweepArrivalProcMeanVar_SingleWorkstationThCtWip
 DEMO_QTheory_MvsG_SingleWorkstationThCtWip
 
 
-%% Analytical Approximation:  Multiple Workstations in Series
-% The following demo uses the closed-form queueing theory approximations from Hopp & Spearman, 
-% chapter 8, plus the linking equation to characterize a single workstation's departure process. 
-% Multiple workstations are arranged in series, all with a low processing time variability, 
-% _except one with very high variability_.  Of interest is how the relative position of the high-
-% variability workstation (e.g. first, middle, last) affects the overall system performance measures
-% of work-in-process, cycle time, and throughput.  The expected result is the farther upstream the 
-% high-variability workstation resides, the more damaging it is on overall system performance 
-% measures.
-%
-% Parameters which can be changed by a user include interarrival time mean & variability, processing
-% time means (one subplot for each) and variability (both the small SCV value for all workstations
-% except one, and the large SCV value for the one aberrant workstation), the number of workstations
-% in series, and the number of servers at each workstation.
-DEMO_QTheory_SweepLargeSCV_MultipleSerialWorkstationsThCtWip
-
-
 
 
 
@@ -101,32 +86,6 @@ DEMO_QTheory_SweepLargeSCV_MultipleSerialWorkstationsThCtWip
 % and the demo is configured to generate a separate curve for each processing time distribution),
 % the single workstation's queue capacity, and its number of servers.
 DEMO_QTvsSim_SweepUtil_SingleWorkstationThCtWip
-
-
-%% Analytical Approximation vs Simulation:  Multiple Workstations in Series
-% The following demo compares queueing theory approximations and discrete-event simulation.  It 
-% evaluates the performance measures work-in-process, cycle time, and throughput for multiple 
-% workstations in series in two different ways: (1) Using closed-form queueing theory approximations
-% from Hopp & Spearman, including the linking equation to characterize each workstation's departure 
-% process, and (2) Using discrete-event simulation.
-%
-% Analytical approximations and simulation are compared for an increasing number of workstations in
-% series (two, then three, then four, ...).  Evaluation is also over a range of utilizations (with
-% each workstation having the same value), because the linking equation is a function of utilization
-% and the goal is to evaluate the linking equation's fidelity.
-%
-% Parameters which can be changed by a user include interarrival time distribution, mean, and
-% variability, processing time distribution, means (one subplot for each), and variability, the type
-% of single workstations assembled in series (plain vanilla, with preemptive failures, with non-
-% preemptive setups, with batching), and each workstation's queue capacity and number of servers.
-%
-% UPDATE:  The _PARALLEL_ version of this demo supercedes the _SERIAL_ version.  It should produce
-% exactly the same results, just much faster.  It introduces parallelization by replacing several 
-% nested FOR loops with a single PARFOR loop, which by default will start and use as many background
-% MATLAB sessions as your processor has cores.
-
-%DEMO_QTvsSim_SweepNWks_MultipleInSeriesThCtWipU_SERIAL
-DEMO_QTvsSim_SweepNWks_MultipleInSeriesThCtWipU_PARALLEL
 
  
 %% Analytical Approximation vs Simulation:  Preemptive Failures
@@ -158,18 +117,18 @@ DEMO_QTvsSim_SweepCountUntilSetupSCV_SingleWorkstationThCtWip
 
 
 %% Simulation:  Demonstrate Parameter Sweeps and Replications
-% This is a mechanical script written to demonstrate how to sweep over two variables plus 
-% replications, and then visualize the results in a surface plot.  It may be somewhat interesting 
-% that one of the swept variables chosen is the single workstation's queue capacity, because any 
+% This is a mechanical script written to demonstrate sweeping over two variables, plus replications,
+% and then visualizing the results in a surface plot.  It may be somewhat interesting that one of 
+% the arbitrarily-chosen swept variables is the single workstation's queue capacity, because any 
 % finite value acts as a WIP cap.  Any of the performance measures [WIP, CT, TH, U] can be plotted
 % against the two swept variables, and cycle time is the arbitrary choice at the time of writing.
 DEMO_Sim_SweepQueueCapAndProcRate_SingleWksThCtWipUtil
 
 
-%% Simulation:  Process Batching (_Parallel_ = processing time is for entire batch)
+%% Simulation:  _Parallel_ Process Batching (processing time is for entire batch)
 % The purpose of the following demo is to reproduce figure 9.6 in Hopp & Spearman (ed. 2).  The demo
-% invokes the simulation model 'GGkWorkstation_MakeAndMoveBatches_Parallel' (through its wrapper
-% function) over a range of process batch sizes with *parallel* batch processing.  Any of the
+% invokes the simulation model *GGkWorkstation_MakeAndMoveBatches_Parallel* (through its wrapper
+% function) over a range of process batch sizes with _parallel_ batch processing.  Any of the
 % performance measures [WIP, CT, TH, UTIL] can be plotted against batch size; Hopp & Spearman's
 % figure 9.6 shows cycle time, so that is what is generated at the time of writing.
 %
@@ -181,10 +140,10 @@ DEMO_Sim_SweepQueueCapAndProcRate_SingleWksThCtWipUtil
 DEMO_Sim_SweepBatchSizeParProc_SingleWorkstationThCtWipUtil
 
 
-%% Simulation:  Process Batching (_Serial_ = processing time is for each element in a batch)
+%% Simulation:  _Serial_ Process Batching (processing time is for each element in a batch)
 % The purpose of the following demo is to reproduce figure 9.5 in Hopp & Spearman (ed. 2).  The demo
-% invokes the simulation model 'GGkWorkstation_MakeAndMoveBatches_SerialWithSetups' (through its
-% wrapper function) over a range of process batch sizes with *serial* batch processing and setups
+% invokes the simulation model *GGkWorkstation_MakeAndMoveBatches_SerialWithSetups* (through its
+% wrapper function) over a range of process batch sizes with _serial_ batch processing and setups
 % between batches.  Any of the performance measures [WIP, CT, TH, UTIL] can be plotted against batch
 % size; Hopp & Spearman's figure 9.5 shows cycle time, so that is what is generated at the time of writing.
 %

@@ -1,7 +1,7 @@
 %% Purpose
-% This is a mechanical script written to demonstrate how to sweep over two variables plus 
-% replications, and then visualize the results in a surface plot.  It may be somewhat interesting 
-% that one of the swept variables chosen is the single workstation's queue capacity, because any 
+% This is a mechanical script written to demonstrate sweeping over two variables, plus replications,
+% and then visualizing the results in a surface plot.  It may be somewhat interesting that one of 
+% the arbitrarily-chosen swept variables is the single workstation's queue capacity, because any 
 % finite value acts as a WIP cap.  Any of the performance measures [WIP, CT, TH, U] can be plotted
 % against the two swept variables, and cycle time is the arbitrary choice at the time of writing.
 

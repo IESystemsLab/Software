@@ -50,15 +50,12 @@ for ii = 1 : nCurves
 	subplot(2,2,ii); hold on; box off;
 	plot(xvals, yvals(:,ii), 'b-');
 	text(xvals(1), yvals(1,ii), curveLabels{ii}, 'VerticalAlignment', 'bottom');
-	
-	if ii==3 || ii==4
-		xlabel(xvalsLabel);		
-	end
-	
-	if ii==1 || ii==3
-		ylabel(yvalsLabel);
-	end
-	
+    if ii==3 || ii==4
+        xlabel(xvalsLabel);
+    end
+    if ii==1 || ii==3
+        ylabel(yvalsLabel);
+    end
 	if ii==1
 		title(sharedTitle, 'FontWeight', 'normal');
 	end

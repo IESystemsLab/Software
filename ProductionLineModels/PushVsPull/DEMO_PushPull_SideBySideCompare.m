@@ -1,20 +1,20 @@
 %% Purpose
 % The following demo makes side-by-side comparisons of the _push_ and _pull_ order release
 % paradigms.  The demo invokes the simulation models *ProdSys_MakeToStockPUSH* and
-% *ProdSys_MakeToStockPULL_CONWIP* (through their wrapper functions), with the latter for a range of
+% *ProdSys_MakeToStockPULL_CONWIP* (through their wrapper functions), the latter over a range of
 % CONWIP amounts.  The output visualizes average work-in-process, cycle time, throughput, and demand 
 % backorder level in the two paradigms.  The expected result is that, for a sufficient amount of CONWIP,
 % the pull paradigm will out-perform the push paradigm.
 %
 % Another purpose of this demo is to visualize a scenario in which a pulling CONWIP system
-% actually performs _worse_ than a push system.  This is done by visualizing simulation traces of
+% actually performs worse than a push system.  This is done by visualizing single-replication traces of
 % the demand backorder level to see how each system recovers from disruptions.  The expected result is
 % that increasing CONWIP level will ensure that a system _will recover at all_ and _will recover
 % faster_ from disruptions.  While it may seem straightforward to avoid poorly-performing CONWIP
 % scenarios by setting the CONWIP amount sufficiently high, recall that there is also an incentive to
-% keep the CONWIP amount low so that the finished goods inventory level remains low.  Another
+% keep the CONWIP amount low to keep the finished goods inventory level low.  Another
 % complication is that a non-stationary demand process may cause a static CONWIP level which is
-% sufficiently high at the time of choosing to become too low over time.
+% sufficiently high in the past to become too low over time.
 %
 % Parameters which can be changed by a user include demand interarrival times' 
 % distribution, mean, and variability, processing times' distribution, mean, and variability at each

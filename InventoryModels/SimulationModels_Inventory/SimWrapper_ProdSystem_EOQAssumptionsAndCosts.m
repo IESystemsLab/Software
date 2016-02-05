@@ -114,7 +114,14 @@ set_param(pathND, 'const', num2str(stopNumberDemands));
 veryLargeSimEndTime = 1e8;
 set_param(sysName, 'StartTime', num2str(0), 'StopTime', num2str(veryLargeSimEndTime));
 se_randomizeseeds(sysName, 'Mode', 'All');
+
+w1ID = 'Simulink:blocks:DivideByZero';
+w1 = warning('off', w1ID);
+w2ID = 'Simulink:Engine:OutputNotConnected';
+w2 = warning('off', w2ID);
 simout = sim(sysName, 'SaveOutput', 'on');
+% warning(w1); %Reset state
+% warning(w2); %Reset state
 
 
 %% Results (per satisfied demand)

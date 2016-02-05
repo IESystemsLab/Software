@@ -51,7 +51,7 @@ function [ WIP_mean, CT_mean, TH_mean, Util_means ] = GGkWorkstationPerfMetrics_
 
 
 %% Check File Dependencies
-f1 = 'GG1WorkstationPerfMetrics_QTheory.m';
+f1 = 'GGkWorkstationPerfMetrics_QTheory.m';
 f2 = 'SCVofDepartProcessFromSingleWorkstation_QTheory.m';
 HELPER_ValidateFileDependencies({f1, f2});
 

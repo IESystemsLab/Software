@@ -1,7 +1,7 @@
 %% Purpose
 % The purpose of the following demo is to reproduce figure 9.5 in Hopp & Spearman (ed. 2).  The demo
-% invokes the simulation model 'GGkWorkstation_MakeAndMoveBatches_SerialWithSetups' (through its
-% wrapper function) over a range of process batch sizes with *serial* batch processing and setups
+% invokes the simulation model *GGkWorkstation_MakeAndMoveBatches_SerialWithSetups* (through its
+% wrapper function) over a range of process batch sizes with _serial_ batch processing and setups
 % between batches.  Any of the performance measures [WIP, CT, TH, UTIL] can be plotted against batch
 % size; Hopp & Spearman's figure 9.5 shows cycle time, so that is what is generated at the time of writing.
 %
