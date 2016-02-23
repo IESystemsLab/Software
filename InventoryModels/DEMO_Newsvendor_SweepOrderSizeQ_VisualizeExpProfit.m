@@ -63,15 +63,8 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'NewsvendorMonteCarloSimulation';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
-Demand_distrib = 'gamma';
-%Interesting: Q* changes as the distrib changes (try 'normal' vs 'gamma' or 'lognormal')
-%Be aware that 'normal' isn't quite because negative demand samples are truncated at zero.
+Demand_distrib = 'gamma';  %If applicable, negative samples are truncated at zero
 Demand_mean = 225;
 Demand_SCV = (250^2)/(225^2);
 
@@ -79,41 +72,31 @@ Cost_unit = 8;
 Price_unit = 18;
 SalvageValue_unit = 0;
 
-Q_min = 1;
-Q_increment = 1;
-Q_max = 450;
-Q = Q_min : Q_increment : Q_max;  %Sweep over this
+searchQ = 1 : 1 : 450;  %Sweep over this
 
 nReps = 50000;  %replications
 
-% Demand_distrib = 'normal';
-% Demand_mean = 20000;
-% Demand_SCV = (7000^2)/(20000^2);
-% 
-% Cost_unit = 300;
-% Price_unit = 900;
-% SalvageValue_unit = 0;
-% 
-% Q_min = 15000;
-% Q_increment = 100;
-% Q_max = 30000;
+
+%% Check File Dependencies
+f1 = 'NewsvendorMonteCarloSimulation';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate
 [ ExpectedProfit, ProbLosingMoney ] = NewsvendorMonteCarloSimulation( ...
     Demand_distrib, Demand_mean, Demand_SCV, ...
     Cost_unit, Price_unit, SalvageValue_unit, ...
-    Q, nReps );
+    searchQ, nReps );
 
 
 %% Empirical Optimum
 [ExpectedProfitAtQStar, QStarIndex] = max(ExpectedProfit);
-QStar = Q(QStarIndex);
+QStar = searchQ(QStarIndex);
 
 
 %% Visualize:  Expected Profit vs Q
 figure, hold on, box off;
-plot(Q, ExpectedProfit)
+plot(searchQ, ExpectedProfit)
 xlabel('Order Quantity Q')
 ylabel('E[Profit] = E[revenue + salvageRevenue - unitCosts]')
 title('Newsvendor:  Expected Profit', 'FontWeight', 'Normal')
@@ -125,7 +108,7 @@ ExpectedProfitRatio = ExpectedProfit / ExpectedProfitAtQStar;
 expProfitIndices = find(ExpectedProfitRatio > profitRatioCutoff);
 
 figure, hold on, box off;
-plot(Q(expProfitIndices), ExpectedProfitRatio(expProfitIndices))
+plot(searchQ(expProfitIndices), ExpectedProfitRatio(expProfitIndices))
 xlabel('Order Quantity Q')
 ylabel('E[Profit] at Q / E[Profit] at Q*')
 title(['Newsvendor:  Expected Profit Sensitivity around (empirical) Q*=' num2str(QStar)], 'FontWeight', 'Normal')
@@ -139,11 +122,11 @@ ylabel('E[Profit]')
 title('Newsvendor:  Visualize E[Profit] and Pr[Profit < 0] for each Q', 'FontWeight', 'Normal')
 
 nLabels = 12;
-nQ = length(Q);
+nQ = length(searchQ);
 sampleIncrement = round(nQ / nLabels);
 Qindices = 1 : sampleIncrement : nQ;
 for ii = 1 : length(Qindices)
     QIndex = Qindices(ii);
-    text(ProbLosingMoney(QIndex), ExpectedProfit(QIndex), ['Q=' num2str(Q(QIndex))], ...
+    text(ProbLosingMoney(QIndex), ExpectedProfit(QIndex), ['Q=' num2str(searchQ(QIndex))], ...
         'HorizontalAlignment', 'left', 'VerticalAlignment', 'bottom');
 end

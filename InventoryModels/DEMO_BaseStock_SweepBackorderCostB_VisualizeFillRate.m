@@ -65,12 +65,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
-f2 = 'Inventory_BaseStock_ComputeRStar';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 120;
 DemandInterarrivalTime_Distrib = 'gamma';
@@ -88,6 +82,12 @@ UnitAnnualBackorderCost_B = FractionsOfH * UnitAnnualHoldingCost_H;  %Sweep over
 nReps = 10;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
+f2 = 'Inventory_BaseStock_ComputeRStar';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Simulate

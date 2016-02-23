@@ -66,11 +66,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'NewsvendorMonteCarloSimulation';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 Demand_distribs = {'exponential', 'uniform', 'triangular_symmetric', 'gamma', 'lognormal', 'normal'};
 %(uniform, triangular, and normal may not be quite so because negative demand samples are truncated at zero)
@@ -81,16 +76,18 @@ Cost_unit = 8;
 Price_unit = 18;
 SalvageValue_unit = 0;
 
-Q_min = 1;
-Q_increment = 1;
-Q_max = 500;
-Q = Q_min : Q_increment : Q_max;  %Sweep over this
+searchQ = 1 : 1 : 500;  %Sweep over this
 
 nReps = 20000;  %replications
 
 
+%% Check File Dependencies
+f1 = 'NewsvendorMonteCarloSimulation';
+HELPER_ValidateFileDependencies({f1});
+
+
 %% Simulate
-nQ = length(Q);
+nQ = length(searchQ);
 nDistribs = length(Demand_distribs);
 ExpectedProfit = zeros(nQ, nDistribs);
 
@@ -98,7 +95,7 @@ for ii = 1 : nDistribs
     ExpectedProfit(:,ii) = NewsvendorMonteCarloSimulation( ...
         Demand_distribs{ii}, Demand_mean, Demand_SCV, ...
         Cost_unit, Price_unit, SalvageValue_unit, ...
-        Q, nReps );
+        searchQ, nReps );
 end
 
 
@@ -108,12 +105,12 @@ figure, hold on, box off;
 %Iterate over all SCVs
 for jj = 1 : nDistribs
 	%Plot a curve for a specific DemandSCV
-	plot(Q, ExpectedProfit(:, jj))
+	plot(searchQ, ExpectedProfit(:, jj))
 	
 	%Add a label identifying this curve's DemandSCV value
 	[maxValue, maxIndex] = max(ExpectedProfit(:, jj));
-	plot(Q(maxIndex), maxValue, 'k.', 'MarkerSize', 16);
-	text(Q(maxIndex), maxValue, Demand_distribs{jj}, 'FontSize', 11, 'FontWeight', 'bold', ...
+	plot(searchQ(maxIndex), maxValue, 'k.', 'MarkerSize', 16);
+	text(searchQ(maxIndex), maxValue, Demand_distribs{jj}, 'FontSize', 11, 'FontWeight', 'bold', ...
 		'HorizontalAlignment', 'left', 'VerticalAlignment', 'middle', 'Interpreter', 'none');
 end
 axis tight

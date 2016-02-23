@@ -72,11 +72,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 120;
 DemandInterarrivalTime_Distrib = 'gamma';
@@ -86,7 +81,7 @@ ReplenishLeadTime_Distrib = 'gamma';
 ReplenishLeadTimeYears_mean = 1/12;
 ReplenishLeadTimeYears_variance = eps;
 
-UnitProductionCost_C = 1;  %In Hopp & Spearman's Base Stock example this is 750, but to scale plots I'll reduce it to 1.
+UnitProductionCost_C = 1;  %In Hopp & Spearman's base stock example this is 750, but to scale plots I'll reduce it to 1.
 UnitAnnualHoldingCost_H = 180;
 UnitAnnualBackorderCost_B = 300;
 
@@ -95,6 +90,11 @@ BaseStockLevel_R = 5 : 1 : 20;  %Sweep over this
 nReps = 10;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

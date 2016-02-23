@@ -56,11 +56,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_EOQAssumptionsAndCosts';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 1000;
 DemandInterarrivalTime_Distrib = 'gamma';
@@ -76,6 +71,11 @@ LotSize_Q = 169;  %Q*=169 for A=500, D=1000, H=35.
 nReps = 5;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_EOQAssumptionsAndCosts';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Storage Variables for Simulation Results

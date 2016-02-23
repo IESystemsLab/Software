@@ -77,13 +77,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_QrAssumptionsAndCosts';
-f2 = 'Inventory_BaseStock_ComputeRStar';
-f3 = 'Inventory_EOQ_ComputeQStar';
-HELPER_ValidateFileDependencies({f1, f2, f3});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 140;
 DemandInterarrivalTime_Distrib = 'gamma';
@@ -104,6 +97,13 @@ ReorderPoint_R = 2 : 2 : 50;  %Sweep over this
 nReps = 3;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_QrAssumptionsAndCosts';
+f2 = 'Inventory_BaseStock_ComputeRStar';
+f3 = 'Inventory_EOQ_ComputeQStar';
+HELPER_ValidateFileDependencies({f1, f2, f3});
 
 
 %% Analytical Optimum

@@ -65,11 +65,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'NewsvendorMonteCarloSimulation';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 Demand_distrib = 'gamma';
 Demand_mean = 225;
@@ -82,6 +77,11 @@ SalvageValue_unit = 0;
 Q = 300;
 
 nReps = 50000;  %replications
+
+
+%% Check File Dependencies
+f1 = 'NewsvendorMonteCarloSimulation';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

@@ -53,12 +53,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_EOQAssumptionsAndCosts';
-f2 = 'Inventory_EOQ_ComputeQStar';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 1000;
 DemandInterarrivalTime_Distrib = 'normal';
@@ -72,6 +66,12 @@ UnitAnnualHoldingCost_H = FractionsOfA * LotSetupCost_A;  %Sweep over this
 nReps = 4;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_EOQAssumptionsAndCosts';
+f2 = 'Inventory_EOQ_ComputeQStar';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Storage Variables for Simulation Results

@@ -64,11 +64,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 DemandUnitsPerYear_mean = 120;
 DemandInterarrivalTime_Distrib = 'gamma';
@@ -90,6 +85,11 @@ BaseStockLevel_R = 11;
 nReps = 12;  %replications
 SimTimeUnit = 'hours';  %Choices: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 minDepartBeforeSimStop = 2400;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSystem_BaseStockAssumptionsAndCosts';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

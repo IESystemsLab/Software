@@ -64,15 +64,9 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'NewsvendorMonteCarloSimulation';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
-Demand_distrib = 'gamma';
-%Interesting:  Try 'normal' vs 'gamma'.  Curves' shapes change and Q*'s trend reverses!
-%(uniform, triangular, and normal may not be quite so because negative demand samples are truncated at zero)
+Demand_distrib = 'gamma';  %If applicable, negative samples are truncated at zero
+%Interesting:  Try 'normal' vs 'gamma', and watch the Q* trend reverse!  Hopp & Spearman consider this in a footnote.
 Demand_mean = 225;
 Demand_SCV = [1e-4, 0.01, 0.05, 0.1, 0.2, 0.4, 0.8, 2, 4];  %Sweep over this
 
@@ -80,16 +74,18 @@ Cost_unit = 8;
 Price_unit = 18;
 SalvageValue_unit = 0;
 
-Q_min = 1;
-Q_increment = 1;
-Q_max = 600;
-Q = Q_min : Q_increment : Q_max;  %Sweep over this
+searchQ = 1 : 1 : 600;  %Sweep over this
 
 nReps = 10000;  %replications
 
 
+%% Check File Dependencies
+f1 = 'NewsvendorMonteCarloSimulation';
+HELPER_ValidateFileDependencies({f1});
+
+
 %% Simulate
-nQ = length(Q);
+nQ = length(searchQ);
 nSCVs = length(Demand_SCV);
 ExpectedProfit = zeros(nQ, nSCVs);
 
@@ -97,7 +93,7 @@ for ii = 1 : nSCVs
     ExpectedProfit(:,ii) = NewsvendorMonteCarloSimulation( ...
         Demand_distrib, Demand_mean, Demand_SCV(ii), ...
         Cost_unit, Price_unit, SalvageValue_unit, ...
-        Q, nReps );
+        searchQ, nReps );
 end
 
 
@@ -107,11 +103,11 @@ figure, hold on, box off;
 %Iterate over all SCVs
 for jj = 1 : nSCVs
 	%Plot a curve for a specific DemandSCV
-	plot(Q, ExpectedProfit(:, jj))
+	plot(searchQ, ExpectedProfit(:, jj))
 	
 	%Add a label identifying this curve's DemandSCV value
 	[maxValue, maxIndex] = max(ExpectedProfit(:, jj));
-	text(Q(maxIndex), maxValue, ['DemandSCV = ' num2str(Demand_SCV(jj))], ...
+	text(searchQ(maxIndex), maxValue, ['DemandSCV = ' num2str(Demand_SCV(jj))], ...
 		'FontSize', 11', 'FontWeight', 'bold');
 end
 xlabel('Order Quantity Q')
