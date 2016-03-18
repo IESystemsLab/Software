@@ -56,6 +56,15 @@ plot(xvals, yvals2, 'g--');
 text(xvals(end), yvals2(end), yvals2Label, 'HorizontalAlignment', 'right');
 
 %Another curve for Throughput
+%%%%%
+%SCENARIO: Interarrival Times are scalar, Processing Times are vector => WIP and CT are vectors, TH is scalar
+L1 = length(yvals1);
+L2 = length(yvals2);
+L3 = length(yvals3);
+if L1 > 1 && L2 > 1 && L1 == L2 && L3 <= 1
+    yvals3 = yvals3 * ones(1,L1);
+end
+%%%%%
 plot(xvals, yvals3, 'b-.');
 text(xvals(end), yvals3(end), yvals3Label, 'HorizontalAlignment', 'right');
 

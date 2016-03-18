@@ -66,7 +66,7 @@
 
 %% Input Parameters
 Demand_distrib = 'gamma';  %If applicable, negative samples are truncated at zero
-%Interesting:  Try 'normal' vs 'gamma', and watch the Q* trend reverse!  Hopp & Spearman consider this in a footnote.
+%Interesting:  Try 'normal' vs 'gamma' and watch the Q* trend reverse!  Hopp & Spearman consider this in a footnote.
 Demand_mean = 225;
 Demand_SCV = [1e-4, 0.01, 0.05, 0.1, 0.2, 0.4, 0.8, 2, 4];  %Sweep over this
 

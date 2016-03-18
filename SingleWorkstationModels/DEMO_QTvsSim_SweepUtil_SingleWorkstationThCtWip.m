@@ -39,13 +39,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'GG1WorkstationPerfMetrics_QTheory.m';
-f2 = 'SimWrapper_GGkWorkstation.m';
-f3 = 'HELPER_VisualizationType2.m';
-HELPER_ValidateFileDependencies({f1, f2, f3});
-
-
 %% Input Variables
 InterarrivalTime_distrib = 'gamma';
 InterarrivalTime_mean = 60;
@@ -56,17 +49,23 @@ InterarrivalTime_var = 60^2;  %SCVia = 1
 %just harder and not implemented at the time of writing.
 ProcessingTime_DistribRange = {'Uniform', 'Triangular_Symmetric', 'Gamma', 'Normal', 'Lognormal', 'Beta_HalfToOneAndOneHalfMean'};
 
-% Vary utilization using Processing Time means
+% Vary utilization using processing time mean
 ProcessingTime_MeanRange = [55: 0.5: 58, 58.5: 0.2: 59.3, 59.5: 0.1: 59.8];
-%Keep variance small because some of the distribution types can go negative ... to eliminate any
-%risk of a negative sample, use a non-negative distribution.
+%Keep processing time variance small because some of the distribution types above can go negative
 ProcessingTime_var = 60;  %SCVp ~ 0.0167.
 
 QueueCapacity = Inf;
 NumberOfServers = 1;
 
-nReps = 5;  %replications
+nReps = 10;  %replications
 nDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'GG1WorkstationPerfMetrics_QTheory.m';
+f2 = 'SimWrapper_GGkWorkstation.m';
+f3 = 'HELPER_VisualizationType2.m';
+HELPER_ValidateFileDependencies({f1, f2, f3});
 
 
 %% Simulate

@@ -38,20 +38,20 @@
 
 
 %% Input Parameters
-processBatchSize = [5 : 1 : 15, 20 : 5 : 60];  %Sweep over this
+processBatchSize = 64 : 3 : 127;  %Sweep over this
 transferBatchSize = 1;
 nServers = 1;
 
 iaDistrib = 'exponential';
-iaMean = 20;
-iaVar = 20^2;  %code will ignore this value if 'exponential' because it's a one-parameter distribution
+iaMean = 0.1;
+iaVar = 0.1^2;  %code will ignore this value if 'exponential' because it's a one-parameter distribution
 
 batchProcDistrib = 'exponential';
-batchProcMean = 90;
-batchProcVar = 90^2;  %code will ignore this value if 'exponential' because it's a one-parameter distribution
+batchProcMean = 6;
+batchProcVar = 6^2;  %code will ignore this value if 'exponential' because it's a one-parameter distribution
 
-nReps = 15;  %replications (for each value of the swept variable)
-nDepartBeforeSimStop = 20000;
+nReps = 20;  %replications (for each value of the swept variable)
+nDepartBeforeSimStop = 30000;
 
 
 %% Check File Dependencies
@@ -60,33 +60,30 @@ HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate
-WIP_reps = zeros(nReps, 1);
-CT_reps = zeros(nReps, 1);
-TH_reps = zeros(nReps, 1);
-U_reps = zeros(nReps, 1);
 nK = length(processBatchSize);
-WIP_average = zeros(nK, 1);
-CT_average = zeros(nK, 1);
-TH_average = zeros(nK, 1);
-U_average = zeros(nK, 1);
+N = nK * nReps;
+processBatchSize_repd2 = repmat(processBatchSize', 1, nReps);
 
-%Outer loop for sweep variable
-for ii = 1 : nK
-    
-    %Inner loop for replications
-	for jj = 1 : nReps
-		[WIP_reps(jj), CT_reps(jj), TH_reps(jj), U_reps(jj)] = SimWrapper_GGkWorkstation_MakeAndMoveBatches_Parallel( ...
-			iaDistrib, iaMean, iaVar, ...
-			batchProcDistrib, batchProcMean, batchProcVar, ...
-			processBatchSize(ii), transferBatchSize, nServers, nDepartBeforeSimStop);
-    end
-    
-    %Average over all replications
-	WIP_average(ii) = mean(WIP_reps);
-	CT_average(ii) = mean(CT_reps);
-	TH_average(ii) = mean(TH_reps);
-	U_average(ii) = mean(U_reps);
+WIP_average2 = zeros(nK, nReps);
+CT_average2 = zeros(nK, nReps);
+TH_average2 = zeros(nK, nReps);
+U_average2 = zeros(nK, nReps);
+
+parfor ii = 1 : N
+    [   WIP_average2(ii), CT_average2(ii), TH_average2(ii), U_average2(ii)] = ...
+    SimWrapper_GGkWorkstation_MakeAndMoveBatches_Parallel( ...
+        iaDistrib, iaMean, iaVar, ...
+		batchProcDistrib, batchProcMean, batchProcVar, ...
+		processBatchSize_repd2 (ii), transferBatchSize, nServers, nDepartBeforeSimStop);
 end
+
+
+%% Flatten replications (average over all)
+repDim = 2;
+WIP_average = mean(WIP_average2, repDim);
+CT_average = mean(CT_average2, repDim);
+TH_average = mean(TH_average2, repDim);
+U_average = mean(U_average2, repDim);
 
 
 %% Visualize

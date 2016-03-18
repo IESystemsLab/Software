@@ -37,12 +37,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'GG1WorkstationPerfMetrics_NonpreempSetups_QTheory.m';
-f2 = 'SimWrapper_GG1Workstation_RandomCountUntilNonpreempSetup.m';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Random process parameters
 %Inter-arrival times
 distribIATime = 'normal';
@@ -65,7 +59,13 @@ meanSetupTime = 20;
 varianceSetupTime = eps;
 
 nReps = 15;  %replications
-nDepartBeforeSimStop = 15000;
+nDepartBeforeSimStop = 20000;
+
+
+%% Check File Dependencies
+f1 = 'GG1WorkstationPerfMetrics_NonpreempSetups_QTheory.m';
+f2 = 'SimWrapper_GG1Workstation_RandomCountUntilNonpreempSetup.m';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Closed-Form

@@ -36,12 +36,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'GG1WorkstationPerfMetrics_PreempFailures_QTheory.m';
-f2 = 'SimWrapper_GG1Workstation_RandomCalendarTimeUntilPreempFailure.m';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Random process parameters
 distribIA = 'normal';
 meanIA = 10;
@@ -51,7 +45,7 @@ distribProc = 'normal';
 meanProc = 7.5;
 varianceProc = eps;
 
-%Failures:  Hopp & Spearman's definition of MTTF assumes that the clock stops during repairs, and
+%MTTF:  Hopp & Spearman's definition of MTTF assumes that the clock stops during repairs, and
 %the simulation model was built to match that assumption.
 distribFail = 'gamma'; 
 MTTF = 200;
@@ -62,7 +56,13 @@ MTTR = 20;
 varianceTTR = eps;
 
 nReps = 15;  %replications
-nDepartBeforeSimStop = 15000;
+nDepartBeforeSimStop = 20000;
+
+
+%% Check File Dependencies
+f1 = 'GG1WorkstationPerfMetrics_PreempFailures_QTheory.m';
+f2 = 'SimWrapper_GG1Workstation_RandomCalendarTimeUntilPreempFailure.m';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Closed-Form

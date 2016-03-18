@@ -33,11 +33,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_GGkWorkstation.m';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 iaDistrib = 'normal';
 iaMean = 100;
@@ -52,6 +47,11 @@ numberOfServers = 1;
 
 nReps = 10;
 nDepartBeforeSimStop = 2000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_GGkWorkstation.m';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

@@ -36,6 +36,12 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+%% Input Variables
+InterarrivalTime_mean = 10;
+ProcessingTime_mean = 9.9;
+SCVs = 0.1 : 0.1 : 2;  %Use the same SCVs for both inter-arrivals and processing
+
+
 %% Check File Dependencies
 f1 = 'MM1WorkstationPerfMetrics_QTheory.m';
 f2 = 'GG1WorkstationPerfMetrics_QTheory.m';
@@ -43,12 +49,6 @@ f3 = 'MMkWorkstationPerfMetrics_QTheory.m';
 f4 = 'GGkWorkstationPerfMetrics_QTheory.m';
 f5 = 'HELPER_VisualizationType3.m';
 HELPER_ValidateFileDependencies({f1, f2, f3, f4, f5});
-
-
-%% Input Variables
-InterarrivalTime_mean = 10;
-ProcessingTime_mean = 9.9;
-SCVs = 0.1 : 0.1 : 2;  %Use the same SCVs for both inter-arrivals and processing
 
 
 %% Compare

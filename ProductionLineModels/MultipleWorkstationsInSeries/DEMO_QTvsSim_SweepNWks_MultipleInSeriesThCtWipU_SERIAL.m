@@ -43,14 +43,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'GGkWorkstationPerfMetrics_MultipleInSeries_QTheory.m';
-f2 = 'SimWrapper_GGkWorkstation_MultipleInSeries.m';
-f3 = 'HELPER_VisualizationType5.m';
-libName = 'SingleWorkstationModelLibrary';
-HELPER_ValidateFileDependencies({f1, f2, f3, libName});
-
-
 %% Input Variables
 InterarrivalTime_distrib = 'gamma';
 InterarrivalTime_mean = 100;
@@ -60,7 +52,7 @@ nWksInSeries = 1 : 1 : 15;  %Sweep over this
 
 %Each serial workstation will have the same processing time values
 ProcessingTime_distrib = 'gamma';
-ProcessingTime_means = [0.1 1 99 99.9];  %Also sweep over this to vary utilization
+ProcessingTime_means = [0.1 1 99 99.9];  %Sweep over this (to vary utilization)
 ProcessingTime_SCV = 0.1;
 
 QueueCapacity = Inf;
@@ -69,12 +61,20 @@ NumberOfServers = 1;
 nReps = 3;  %replications
 nDepartBeforeSimStop = 2000;
 
-% A name for the SimEvents model to create.  CAREFUL: If a model with this name already exists, then
+% Choose a name for the SimEvents model to create.  CAREFUL: If a model with this name already exists, then
 % all content will be erased!
 sysName = 'MultipleWorkstations_nInSeries';
-% libName is defined and checked above.  Which block to use in the single workstation model library?
+% Choose a block type to use from the single workstation model library.
 % (At time of writing, it also contains library objects with preemptive failures, non-preemptive setups, and batching)
+libName = 'SingleWorkstationModelLibrary';
 wksLibObjName = 'GGkWorkstation';
+
+
+%% Check File Dependencies
+f1 = 'GGkWorkstationPerfMetrics_MultipleInSeries_QTheory.m';
+f2 = 'SimWrapper_GGkWorkstation_MultipleInSeries.m';
+f3 = 'HELPER_VisualizationType5.m';
+HELPER_ValidateFileDependencies({f1, f2, f3, libName});
 
 
 %% Simulate

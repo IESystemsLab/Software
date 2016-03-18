@@ -32,26 +32,26 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_GGkWorkstation_MakeAndMoveBatches_Parallel';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 makeBatchSize = 12;
 moveBatchSize = 1;
-nServers = 1;  %G/G/1
+nServers = 1;
 
 iaDistrib = 'exponential';
-iaMean = 20;
-iaVar = 20^2;  %code will ignore this value if 'exponential' b/c it's a one-parameter distribution
+iaMean = 20;  %hours/job
+iaVar = 20^2;  %code will ignore this value if 'exponential' because it's a one-parameter distribution
 
 batchProcDistrib = 'exponential';
-batchProcMean = 90;
+batchProcMean = 90;  %hours/batch
 batchProcVar = 90^2;  %code will ignore this value if 'exponential' b/c it's a one-parameter distribution
 
 nReps = 10;
-nDepartBeforeSimStop = 2500;
+nDepartBeforeSimStop = 10000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_GGkWorkstation_MakeAndMoveBatches_Parallel';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

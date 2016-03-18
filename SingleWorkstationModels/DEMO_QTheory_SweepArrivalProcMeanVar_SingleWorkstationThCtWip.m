@@ -38,19 +38,18 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+%% Variables
+%Small numbers are chosen for scale (to make WIP, CT, and TH coexist nicely on the same plot)
+InterarrivalTime_mean = 2;
+InterarrivalTime_var = 2^2;  %SCVia = 1
+ProcessingTime_mean = 1;
+ProcessingTime_var = 1^2;  %SCVp = 1
+
+
 %% Check File Dependencies
 f1 = 'GGkWorkstationPerfMetrics_QTheory.m';
 f2 = 'HELPER_VisualizationType1.m';
 HELPER_ValidateFileDependencies({f1, f2});
-
-
-%% Variables
-%Small numbers are chosen to scale the resulting visualizations
-%(to make WIP, CT, and TH coexist nicely on the same plot)
-InterarrivalTime_mean = 2;
-InterarrivalTime_var = 4;  %SCVia = 1
-ProcessingTime_mean = 1;
-ProcessingTime_var = 1;  %SCVp = 1
 
 
 %% Inter-Arrival Times:  Change the mean

@@ -39,22 +39,22 @@
 
 
 %% Input Parameters
-processBatchSize = 3 : 1 : 12;
+processBatchSize = 21 : 1 : 35;
 %transferBatchSize = processBatchSize;  %If NO lot splitting
 transferBatchSize = 1 * ones(1, length(processBatchSize));  %If YES lot splitting
 
 iaDistrib = 'exponential';
-iaMean = 60;
-iaVar = 60^2;  %code will ignore this value b/c exponential is a one-paramater distribution
+iaMean = 0.5;
+iaVar = 0.5^2;  %code will ignore this value b/c exponential is a one-paramater distribution
 
 procDistrib = 'exponential';
-procMean = 16;
-procVar = 16^2;  %code will ignore this value b/c exponential is a one-paramater distribution
+procMean = 0.25;
+procVar = 0.25^2;  %code will ignore this value b/c exponential is a one-paramater distribution
 
-setupTime = 120;  %Hopp & Spearman (sec 9.4.2 in ed2) have this as deterministic
+setupTime = 5;  %Hopp & Spearman (sec 9.4.2 in ed2) have this as deterministic
 
-nReps = 10;  %replications
-nDepartBeforeSimStop = 10000;
+nReps = 15;  %replications
+nDepartBeforeSimStop = 25000;
 
 
 %% Check File Dependencies
@@ -63,34 +63,32 @@ HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate
-WIP_reps = zeros(nReps, 1);
-CT_reps = zeros(nReps, 1);
-TH_reps = zeros(nReps, 1);
-U_reps = zeros(nReps, 1);
 nK = length(processBatchSize);
-WIP_average = zeros(nK, 1);
-CT_average = zeros(nK, 1);
-TH_average = zeros(nK, 1);
-U_average = zeros(nK, 1);
+N = nK * nReps;
+processBatchSize_repd2 = repmat(processBatchSize', 1, nReps);
+transferBatchSize_repd2 = repmat(transferBatchSize', 1, nReps);
 
-%Outer loop for sweep variable
-for ii = 1 : nK
-    
-    %Inner loop for replications
-	for jj = 1 : nReps
-		[WIP_reps(jj), CT_reps(jj), TH_reps(jj), U_reps(jj)] = SimWrapper_GG1Workstation_MakeAndMoveBatches_SerialWithSetups( ...
-			iaDistrib, iaMean, iaVar, ...
-			procDistrib, procMean, procVar, ...
-			setupTime, ...
-			processBatchSize(ii), transferBatchSize(ii), nDepartBeforeSimStop );
-    end
-    
-    %Average over all replications
-	WIP_average(ii) = mean(WIP_reps);
-	CT_average(ii) = mean(CT_reps);
-	TH_average(ii) = mean(TH_reps);
-	U_average(ii) = mean(U_reps);
+WIP_average2 = zeros(nK, nReps);
+CT_average2 = zeros(nK, nReps);
+TH_average2 = zeros(nK, nReps);
+U_average2 = zeros(nK, nReps);
+
+parfor ii = 1 : N
+    [   WIP_average2(ii), CT_average2(ii), TH_average2(ii), U_average2(ii) ] = ...
+    SimWrapper_GG1Workstation_MakeAndMoveBatches_SerialWithSetups( ...
+		iaDistrib, iaMean, iaVar, ...
+		procDistrib, procMean, procVar, ...
+		setupTime, ...
+		processBatchSize_repd2 (ii), transferBatchSize_repd2 (ii), nDepartBeforeSimStop );
 end
+
+
+%% Flatten replications (average over all)
+repDim = 2;
+WIP_average = mean(WIP_average2, repDim);
+CT_average = mean(CT_average2, repDim);
+TH_average = mean(TH_average2, repDim);
+U_average = mean(U_average2, repDim);
 
 
 %% Visualize

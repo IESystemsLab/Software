@@ -53,12 +53,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSys_MakeToStockPUSH';
-f2 = 'SimWrapper_ProdSys_MakeToStockPULL_CONWIP';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Input Parameters
 DemandInterArrivalTime_distrib = 'gamma';
 DemandInterArrivalTime_mean = 20;
@@ -89,6 +83,12 @@ CONWIPAmount = 5 : 1 : 20;  %For the pull system, sweep over this
 
 nReps = 6;  %replications
 nSatDemandsBeforeSimStop = 30000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSys_MakeToStockPUSH';
+f2 = 'SimWrapper_ProdSys_MakeToStockPULL_CONWIP';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Simulate:  Push

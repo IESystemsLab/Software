@@ -41,12 +41,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'GGkWorkstationPerfMetrics_MultipleInSeries_QTheory.m';
-f2 = 'HELPER_VisualizationType4';
-HELPER_ValidateFileDependencies({f1, f2});
-
-
 %% Input Variables
 InterarrivalTime_mean = 100;
 InterarrivalTime_SCV = 1;
@@ -57,6 +51,12 @@ procTimeLargeSCV = 10;  %Used at the one aberrant workstation
 
 nWksInSeries = 20;
 nServersAtEachWks = 1;
+
+
+%% Check File Dependencies
+f1 = 'GGkWorkstationPerfMetrics_MultipleInSeries_QTheory.m';
+f2 = 'HELPER_VisualizationType4';
+HELPER_ValidateFileDependencies({f1, f2});
 
 
 %% Output Variables

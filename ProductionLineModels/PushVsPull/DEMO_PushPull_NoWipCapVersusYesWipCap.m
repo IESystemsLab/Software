@@ -41,11 +41,6 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_ProdSys_MakeToOrderPUSH_optionalWIPCap';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
 OrderInterArrivalTime_distrib = 'gamma';
 OrderInterArrivalTime_mean = 20;
@@ -76,6 +71,11 @@ EachWksCapacity = [Inf, 31 : -2 : 1];  %Sweep over this (with the same value at 
 
 nReps = 10;  %replications
 nDepartBeforeSimStop = 10000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_ProdSys_MakeToOrderPUSH_optionalWIPCap';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate

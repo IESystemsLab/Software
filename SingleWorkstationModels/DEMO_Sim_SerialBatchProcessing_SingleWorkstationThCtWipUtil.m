@@ -32,16 +32,10 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-%% Check File Dependencies
-f1 = 'SimWrapper_GG1Workstation_MakeAndMoveBatches_SerialWithSetups';
-HELPER_ValidateFileDependencies({f1});
-
-
 %% Input Parameters
-makeBatchSize = 10;
-
-moveBatchSize = makeBatchSize;  %If NO lot splitting
-%moveBatchSize = 1;  %If YES lot splitting
+processBatchSize = 10;
+%transferBatchSize = processBatchSize;  %If NO lot splitting
+transferBatchSize = 1;  %If YES lot splitting
 
 iaDistrib = 'exponential';
 iaMean = 60;
@@ -51,10 +45,15 @@ procDistrib = 'exponential';
 procMean = 10;
 procVar = 10^2;  %code will ignore this value if 'exponential', which is a one-parameter distribution
 
-setupTime = 120;  %Hopp & Spearman (sec 9.4.2 in edition 2) have this as deterministic
+setupTime = 120;  %Hopp & Spearman (sec 9.4.2 in ed. 2) have this as deterministic
 
 nReps = 10;
-nDepartBeforeSimStop = 2500;
+nDepartBeforeSimStop = 10000;
+
+
+%% Check File Dependencies
+f1 = 'SimWrapper_GG1Workstation_MakeAndMoveBatches_SerialWithSetups';
+HELPER_ValidateFileDependencies({f1});
 
 
 %% Simulate
@@ -68,7 +67,7 @@ for ii = 1 : nReps
 		iaDistrib, iaMean, iaVar, ...
 		procDistrib, procMean, procVar, ...
 		setupTime, ...
-		makeBatchSize, moveBatchSize, nDepartBeforeSimStop );
+		processBatchSize, transferBatchSize, nDepartBeforeSimStop );
 end
 
 
